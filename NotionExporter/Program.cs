@@ -1,10 +1,59 @@
-﻿using System.Net.Http.Headers;
-using System.Text;
-using System.Text.Json;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using NotionExporter;
+using NotionExporter.Commands;
+using NotionExporter.Infrastructure;
+using Spectre.Console.Cli;
 
+var services = new ServiceCollection();
+
+var configRoot = new ConfigurationBuilder()
+    .AddJsonFile("appsettings.json", optional: true)
+    .AddEnvironmentVariables()
+    .Build();
+
+services.Configure<NotionSettings>(configRoot.GetSection("Notion"));
+services.AddSingleton<IConfiguration>(configRoot);
+services.AddSingleton<DatabasesCommand>();
+services.AddSingleton<NotionAuthHandler>();
+
+services.AddHttpClient<INotionApiClient, NotionApiClient>((sp, client) =>
+    {
+        var settings = sp.GetRequiredService<IOptions<NotionSettings>>().Value;
+
+        client.BaseAddress = new Uri(settings.BaseUrl);
+        client.DefaultRequestHeaders.Add("Notion-Version", "2022-06-28");
+        client.DefaultRequestHeaders.Add("Accept", "application/json");
+
+        if (!string.IsNullOrWhiteSpace(settings.ApiToken))
+        {
+            client.DefaultRequestHeaders.Authorization =
+                new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", settings.ApiToken);
+        }
+    })
+    .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler())
+    .AddHttpMessageHandler<NotionAuthHandler>();
+;
+
+var registrar = new TypeRegistrar(services);
+var app = new CommandApp(registrar);
+
+app.Configure(config =>
+{
+    config.PropagateExceptions();
+    config.SetApplicationName("notion-exporter");
+    config.ValidateExamples();
+
+   // config.AddExample("databases", "--id", "1c5e79756643812e81c2d451290be2cf", "--output", "output.json");
+
+   config.AddCommand<DatabasesCommand>("databases");
+   
+});
+
+return app.Run(args);
+
+/*
 var services = ConfigureServices();
 await using var serviceProvider = services.BuildServiceProvider();
 
@@ -12,7 +61,7 @@ var config = serviceProvider.GetRequiredService<IConfiguration>();
 var cache = serviceProvider.GetRequiredService<ICache>();
 var client = CreateHttpClient(config);
 
-var databaseId = config["Notion:DatabaseId"] 
+var databaseId = config["Notion:DatabaseId"]
                  ?? throw new InvalidOperationException("Missing Notion:DatabaseId in configuration.");
 
 var queryContent = CreateQueryContent();
@@ -45,7 +94,6 @@ foreach (var pageId in pageIds)
 
 writer.Close();
 
-return;
 
 // -------------------- Helpers --------------------
 
@@ -63,10 +111,10 @@ static IServiceCollection ConfigureServices()
 static HttpClient CreateHttpClient(IConfiguration config)
 {
     var token = config["Notion:ApiToken"]
-        ?? throw new InvalidOperationException("Missing Notion:ApiToken in configuration.");
+                ?? throw new InvalidOperationException("Missing Notion:ApiToken in configuration.");
 
     var baseUrl = config["Notion:BaseUrl"]
-        ?? throw new InvalidOperationException("Missing Notion:BaseUrl in configuration.");
+                  ?? throw new InvalidOperationException("Missing Notion:BaseUrl in configuration.");
 
     var client = new HttpClient
     {
@@ -82,21 +130,21 @@ static HttpClient CreateHttpClient(IConfiguration config)
 static StringContent CreateQueryContent()
 {
     const string queryJson = """
-    {
-        "filter": {
-            "property": "Date",
-            "date": {
-                "this_week": {}
-            }
-        },
-        "sorts": [
-            {
-                "property": "Name",
-                "direction": "ascending"
-            }
-        ]
-    }
-    """;
+                             {
+                                 "filter": {
+                                     "property": "Date",
+                                     "date": {
+                                         "this_week": {}
+                                     }
+                                 },
+                                 "sorts": [
+                                     {
+                                         "property": "Name",
+                                         "direction": "ascending"
+                                     }
+                                 ]
+                             }
+                             """;
 
     return new StringContent(queryJson, Encoding.UTF8, "application/json");
 }
@@ -171,3 +219,4 @@ static string? ExtractTextFromBlock(JsonElement block)
 
     return builder.ToString();
 }
+*/
