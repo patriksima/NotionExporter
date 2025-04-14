@@ -26,4 +26,15 @@ public class NotionApiClient(HttpClient httpClient, NotionAuthHandler authHandle
         var stream = await response.Content.ReadAsStreamAsync();
         return await JsonDocument.ParseAsync(stream);
     }
+    
+    public async Task<JsonDocument> RetrievePageAsync(string pageId, string? filterProperties = null)
+    {
+        var url = $"pages/{pageId}";
+
+        var response = await httpClient.GetAsync(url);
+        response.EnsureSuccessStatusCode();
+
+        var stream = await response.Content.ReadAsStreamAsync();
+        return await JsonDocument.ParseAsync(stream);
+    }
 }

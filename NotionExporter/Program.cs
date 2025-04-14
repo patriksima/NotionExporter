@@ -16,7 +16,9 @@ var configRoot = new ConfigurationBuilder()
 services.Configure<NotionSettings>(configRoot.GetSection("Notion"));
 services.AddSingleton<IConfiguration>(configRoot);
 services.AddSingleton<DatabasesCommand>();
+services.AddSingleton<PagesCommand>();
 services.AddSingleton<NotionAuthHandler>();
+services.AddSingleton<TokenResolver>();
 
 services.AddHttpClient<INotionApiClient, NotionApiClient>((sp, client) =>
     {
@@ -48,7 +50,7 @@ app.Configure(config =>
    // config.AddExample("databases", "--id", "1c5e79756643812e81c2d451290be2cf", "--output", "output.json");
 
    config.AddCommand<DatabasesCommand>("databases");
-   
+   config.AddCommand<PagesCommand>("pages");
 });
 
 return app.Run(args);

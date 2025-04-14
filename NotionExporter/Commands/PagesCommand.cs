@@ -1,31 +1,26 @@
 ﻿using System.ComponentModel;
 using System.Text.Json;
+using Microsoft.Extensions.Options;
 using NotionExporter.Infrastructure;
+using NotionExporter.Options;
 using Spectre.Console;
 using Spectre.Console.Cli;
 
 namespace NotionExporter.Commands;
 
-public class DatabasesCommand(TokenResolver tokenResolver, INotionApiClient client)
-    : AsyncCommand<DatabasesCommand.Settings>
+public class PagesCommand(TokenResolver tokenResolver, INotionApiClient client)
+    : AsyncCommand<PagesCommand.Settings>
 {
     public class Settings : CommandSettings
     {
         [CommandArgument(0, "[OPERATION]")]
-        [Description("Operation to execute (default: export)")]
-        public string? Operation { get; set; } = "export";
+        [Description("Operation to execute. Default: export")]
+        [TypeConverter(typeof(OperationConverter))]
+        public Operation? Operation { get; set; } = Options.Operation.Export;
 
-        [CommandOption("--id <DATABASE_ID>")]
-        [Description("Database ID")]
+        [CommandOption("--id <PAGE_ID>")]
+        [Description("Page ID")]
         public string Id { get; set; } = default!;
-
-        [CommandOption("--filter-json <JSON>")]
-        [Description("JSON Notion query (filter + sorts)")]
-        public string? FilterJson { get; set; }
-
-        [CommandOption("--filter-file <FILE>")]
-        [Description("Path to JSON file contains Notion query (filter + sorts)")]
-        public string? FilterFile { get; set; }
 
         [CommandOption("-o|--output <FILE>")]
         [Description("Output file")]
@@ -42,7 +37,7 @@ public class DatabasesCommand(TokenResolver tokenResolver, INotionApiClient clie
         public override ValidationResult Validate()
         {
             return string.IsNullOrWhiteSpace(Id)
-                ? ValidationResult.Error("Database ID must be specified")
+                ? ValidationResult.Error("Page ID must be specified")
                 : ValidationResult.Success();
         }
     }
@@ -53,19 +48,9 @@ public class DatabasesCommand(TokenResolver tokenResolver, INotionApiClient clie
 
         client.SetToken(apiToken);
 
-        var queryJson = settings.FilterJson;
+        var jsonDoc = await client.RetrievePageAsync(settings.Id);
 
-        if (string.IsNullOrWhiteSpace(queryJson) && !string.IsNullOrWhiteSpace(settings.FilterFile))
-        {
-            if (!File.Exists(settings.FilterFile))
-                throw new FileNotFoundException();
-
-            queryJson = await File.ReadAllTextAsync(settings.FilterFile);
-        }
-
-        var jsonDoc = await client.QueryDatabaseAsync(settings.Id, queryJson);
-
-        var fileName = settings.Output ?? $"database-{settings.Id}.json";
+        var fileName = settings.Output ?? $"page-{settings.Id}.json";
         await using (var fs = File.Create(fileName))
         {
             await using var writer = new Utf8JsonWriter(fs, new JsonWriterOptions
