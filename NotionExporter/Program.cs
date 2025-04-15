@@ -43,7 +43,9 @@ var app = new CommandApp(registrar);
 
 app.Configure(config =>
 {
+#if DEBUG
     config.PropagateExceptions();
+#endif
     config.SetApplicationName("notion-exporter");
     config.ValidateExamples();
 
