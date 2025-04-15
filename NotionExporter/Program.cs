@@ -17,6 +17,7 @@ services.Configure<NotionSettings>(configRoot.GetSection("Notion"));
 services.AddSingleton<IConfiguration>(configRoot);
 services.AddSingleton<DatabasesCommand>();
 services.AddSingleton<PagesCommand>();
+services.AddSingleton<BlocksCommand>();
 services.AddSingleton<NotionAuthHandler>();
 services.AddSingleton<TokenResolver>();
 
@@ -53,6 +54,7 @@ app.Configure(config =>
 
    config.AddCommand<DatabasesCommand>("databases");
    config.AddCommand<PagesCommand>("pages");
+   config.AddCommand<BlocksCommand>("blocks");
 });
 
 return app.Run(args);
