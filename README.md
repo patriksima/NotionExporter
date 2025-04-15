@@ -14,6 +14,15 @@
 
 ---
 
+## 🧩 Download
+
+Download the latest release from the [Releases](https://github.com/patriksima/NotionExporter/releases) page.
+
+- ✅ Self-contained executable for Windows
+- ✅ No .NET installation required
+
+---
+
 ## 🛠️ Requirements
 
 - [.NET 9 SDK (preview)](https://dotnet.microsoft.com/) or newer
