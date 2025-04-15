@@ -26,7 +26,7 @@ services.AddHttpClient<INotionApiClient, NotionApiClient>((sp, client) =>
         var settings = sp.GetRequiredService<IOptions<NotionSettings>>().Value;
 
         client.BaseAddress = new Uri(settings.BaseUrl);
-        client.DefaultRequestHeaders.Add("Notion-Version", "2022-06-28");
+        client.DefaultRequestHeaders.Add("Notion-Version", settings.ApiVersion);
         client.DefaultRequestHeaders.Add("Accept", "application/json");
 
         if (!string.IsNullOrWhiteSpace(settings.ApiToken))
