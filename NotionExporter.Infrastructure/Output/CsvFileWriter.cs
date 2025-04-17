@@ -19,14 +19,13 @@ public class CsvFileWriter : IOutputWriter
         if (results.Count == 0)
             return;
 
-        // Get first item's properties as headers
         var first = results.First();
         var headers = first.GetProperty("properties").EnumerateObject().Select(p => p.Name).ToList();
 
         using var writer = string.IsNullOrWhiteSpace(outputPath)
-            ? new StreamWriter(Console.OpenStandardOutput(), Encoding.UTF8) { AutoFlush = true }
-            : new StreamWriter(outputPath, false, Encoding.UTF8) { AutoFlush = true };
-        writer.WriteLine(string.Join(",", headers.Select(Escape)));
+            ? new StreamWriter(Console.OpenStandardOutput(), new UTF8Encoding(false)) { AutoFlush = true }
+            : new StreamWriter(outputPath, false, new UTF8Encoding(false)) { AutoFlush = true };
+        writer.WriteLine(string.Join(";", headers.Select(Escape)));
 
         foreach (var item in results)
         {
@@ -46,15 +45,15 @@ public class CsvFileWriter : IOutputWriter
                 }
             }
 
-            writer.WriteLine(string.Join(",", row));
+            writer.WriteLine(string.Join(";", row));
         }
     }
 
     private static string Escape(string value)
     {
-        if (value.Contains(',') || value.Contains('"'))
+        //if (value.Contains(',') || value.Contains('"'))
             return $"\"{value.Replace("\"", "\"\"")}\"";
-        return value;
+        //return value;
     }
 
     private static string ExtractValue(JsonElement prop)
@@ -69,11 +68,20 @@ public class CsvFileWriter : IOutputWriter
             return name.GetString() ?? string.Empty;
 
         if (prop.TryGetProperty("multi_select", out var ms) && ms.ValueKind == JsonValueKind.Array)
-            return string.Join(";", ms.EnumerateArray().Select(t => t.GetProperty("name").GetString()));
+            return string.Join(",", ms.EnumerateArray().Select(t => t.GetProperty("name").GetString()));
 
         if (prop.TryGetProperty("date", out var date) && date.TryGetProperty("start", out var start))
             return start.GetString() ?? string.Empty;
+        
+        if (prop.TryGetProperty("status", out var status) && status.TryGetProperty("name", out var statusName))
+            return statusName.GetString() ?? string.Empty;
+        
+        if (prop.TryGetProperty("unique_id", out var uniqueId) && uniqueId.TryGetProperty("number", out var uniqueIdNumber))
+            return uniqueIdNumber.GetRawText();
 
+        if (prop.TryGetProperty("number", out var number))
+            return number.GetRawText();
+        
         if (prop.ValueKind == JsonValueKind.String)
             return prop.GetString() ?? string.Empty;
 
