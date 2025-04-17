@@ -33,6 +33,7 @@ services.AddSingleton<ExportBlocksCommand>();
 services.AddSingleton<IOutputWriter, JsonFileWriter>();
 services.AddSingleton<IOutputWriter, CsvFileWriter>();
 services.AddSingleton<IOutputWriterFactory, OutputWriterFactory>();
+services.AddSingleton<IStreamProvider, StreamProvider>();
 
 // handlers
 services.AddTransient<IHandler<ExportDatabasesRequest>, ExportDatabasesHandler>();

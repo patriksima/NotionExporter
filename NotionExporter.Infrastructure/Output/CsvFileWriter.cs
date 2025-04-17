@@ -5,7 +5,7 @@ using NotionExporter.Shared.Output;
 
 namespace NotionExporter.Infrastructure.Output;
 
-public class CsvFileWriter : IOutputWriter
+public class CsvFileWriter(IStreamProvider streamProvider) : IOutputWriter
 {
     public OutputFormat Format => OutputFormat.Csv;
 
@@ -22,9 +22,9 @@ public class CsvFileWriter : IOutputWriter
         var first = results.First();
         var headers = first.GetProperty("properties").EnumerateObject().Select(p => p.Name).ToList();
 
-        using var writer = string.IsNullOrWhiteSpace(outputPath)
-            ? new StreamWriter(Console.OpenStandardOutput(), new UTF8Encoding(false)) { AutoFlush = true }
-            : new StreamWriter(outputPath, false, new UTF8Encoding(false)) { AutoFlush = true };
+        var stream = streamProvider.GetWriteStream(outputPath);
+        var writer = new StreamWriter(stream, new UTF8Encoding(false)) { AutoFlush = true };
+
         writer.WriteLine(string.Join(";", headers.Select(Escape)));
 
         foreach (var item in results)
@@ -52,7 +52,7 @@ public class CsvFileWriter : IOutputWriter
     private static string Escape(string value)
     {
         //if (value.Contains(',') || value.Contains('"'))
-            return $"\"{value.Replace("\"", "\"\"")}\"";
+        return $"\"{value.Replace("\"", "\"\"")}\"";
         //return value;
     }
 
@@ -72,16 +72,17 @@ public class CsvFileWriter : IOutputWriter
 
         if (prop.TryGetProperty("date", out var date) && date.TryGetProperty("start", out var start))
             return start.GetString() ?? string.Empty;
-        
+
         if (prop.TryGetProperty("status", out var status) && status.TryGetProperty("name", out var statusName))
             return statusName.GetString() ?? string.Empty;
-        
-        if (prop.TryGetProperty("unique_id", out var uniqueId) && uniqueId.TryGetProperty("number", out var uniqueIdNumber))
+
+        if (prop.TryGetProperty("unique_id", out var uniqueId) &&
+            uniqueId.TryGetProperty("number", out var uniqueIdNumber))
             return uniqueIdNumber.GetRawText();
 
         if (prop.TryGetProperty("number", out var number))
             return number.GetRawText();
-        
+
         if (prop.ValueKind == JsonValueKind.String)
             return prop.GetString() ?? string.Empty;
 

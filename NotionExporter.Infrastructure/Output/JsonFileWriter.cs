@@ -1,32 +1,24 @@
-﻿using System.Text.Json;
+﻿using System.Text;
+using System.Text.Json;
 using NotionExporter.Applications.Abstractions;
 using NotionExporter.Shared.Output;
 
 namespace NotionExporter.Infrastructure.Output;
 
-public class JsonFileWriter : IOutputWriter
+public class JsonFileWriter(IStreamProvider streamProvider) : IOutputWriter
 {
     public OutputFormat Format => OutputFormat.Json;
 
     public void Write(JsonDocument document, string? outputPath)
     {
-        if (string.IsNullOrWhiteSpace(outputPath))
-        {
-            var json = JsonSerializer.Serialize(document, new JsonSerializerOptions
-            {
-                WriteIndented = true
-            });
-            Console.WriteLine(json);
-        }
-        else
-        {
-            using var fs = File.Create(outputPath);
-            using var writer = new Utf8JsonWriter(fs, new JsonWriterOptions
-            {
-                Indented = true
-            });
+        var stream = streamProvider.GetWriteStream(outputPath);
+        var writer = new StreamWriter(stream, new UTF8Encoding(false)) { AutoFlush = true };
 
-            document.WriteTo(writer);
-        }
+        var json = JsonSerializer.Serialize(document, new JsonSerializerOptions
+        {
+            WriteIndented = true
+        });
+
+        writer.WriteLine(json);
     }
 }
