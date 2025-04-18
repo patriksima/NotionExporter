@@ -1,4 +1,8 @@
-﻿# NotionExporter.exe
+﻿# NotionExporter
+
+![build status](https://github.com/patriksima/NotionExporter/actions/workflows/build.yml/badge.svg?branch=master)
+![codeql status](https://github.com/patriksima/NotionExporter/actions/workflows/github-code-scanning/codeql/badge.svg?branch=master)
+![unit tests status](https://github.com/patriksima/NotionExporter/actions/workflows/unit-tests.yml/badge.svg?branch=master)
 
 **NotionExporter** is a Windows command-line tool built with .NET that exports data from the [Notion API](https://developers.notion.com/) into JSON format. It supports exporting databases, pages, blocks, and allows for custom filters and sorting via query files.
 
