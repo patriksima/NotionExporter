@@ -1,6 +1,16 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NotionExporter", "NotionExporter\NotionExporter.csproj", "{3B5FE154-54FD-457A-B05F-5B654A9B3788}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NotionExporter.Cli", "NotionExporter.Cli\NotionExporter.Cli.csproj", "{23A0B89E-837F-40C1-864A-D0E56C9F4D68}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NotionExporter.Tests", "NotionExporter.Tests\NotionExporter.Tests.csproj", "{A36B7F06-82E3-45B0-A273-3D9517FC076C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NotionExporter.Infrastructure", "NotionExporter.Infrastructure\NotionExporter.Infrastructure.csproj", "{B68121DC-A28A-4571-895C-2D61644820B9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NotionExporter.Shared", "NotionExporter.Shared\NotionExporter.Shared.csproj", "{154FC723-38E2-45EA-8E53-3BFE4BBEAF0E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NotionExporter.Domain", "NotionExporter.Domain\NotionExporter.Domain.csproj", "{DA48D624-058D-4F06-90B6-D80DE7CF9B11}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NotionExporter.Applications", "NotionExporter.Applications\NotionExporter.Applications.csproj", "{43F74443-B355-4C50-8ACE-107CE6DFB6FA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -8,9 +18,32 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{3B5FE154-54FD-457A-B05F-5B654A9B3788}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3B5FE154-54FD-457A-B05F-5B654A9B3788}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3B5FE154-54FD-457A-B05F-5B654A9B3788}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3B5FE154-54FD-457A-B05F-5B654A9B3788}.Release|Any CPU.Build.0 = Release|Any CPU
+		{23A0B89E-837F-40C1-864A-D0E56C9F4D68}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{23A0B89E-837F-40C1-864A-D0E56C9F4D68}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{23A0B89E-837F-40C1-864A-D0E56C9F4D68}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{23A0B89E-837F-40C1-864A-D0E56C9F4D68}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A36B7F06-82E3-45B0-A273-3D9517FC076C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A36B7F06-82E3-45B0-A273-3D9517FC076C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A36B7F06-82E3-45B0-A273-3D9517FC076C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A36B7F06-82E3-45B0-A273-3D9517FC076C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B68121DC-A28A-4571-895C-2D61644820B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B68121DC-A28A-4571-895C-2D61644820B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B68121DC-A28A-4571-895C-2D61644820B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B68121DC-A28A-4571-895C-2D61644820B9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{154FC723-38E2-45EA-8E53-3BFE4BBEAF0E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{154FC723-38E2-45EA-8E53-3BFE4BBEAF0E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{154FC723-38E2-45EA-8E53-3BFE4BBEAF0E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{154FC723-38E2-45EA-8E53-3BFE4BBEAF0E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DA48D624-058D-4F06-90B6-D80DE7CF9B11}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DA48D624-058D-4F06-90B6-D80DE7CF9B11}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DA48D624-058D-4F06-90B6-D80DE7CF9B11}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DA48D624-058D-4F06-90B6-D80DE7CF9B11}.Release|Any CPU.Build.0 = Release|Any CPU
+		{43F74443-B355-4C50-8ACE-107CE6DFB6FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{43F74443-B355-4C50-8ACE-107CE6DFB6FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{43F74443-B355-4C50-8ACE-107CE6DFB6FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{43F74443-B355-4C50-8ACE-107CE6DFB6FA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 EndGlobal

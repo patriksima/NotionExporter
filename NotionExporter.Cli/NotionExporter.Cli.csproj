@@ -1,0 +1,39 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net9.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <None Update="Examples\notion-database-export.ps1">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="Examples\notion-page-export.ps1">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="appsettings.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\NotionExporter.Applications\NotionExporter.Applications.csproj"/>
+        <ProjectReference Include="..\NotionExporter.Infrastructure\NotionExporter.Infrastructure.csproj" />
+        <ProjectReference Include="..\NotionExporter.Shared\NotionExporter.Shared.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="9.0.4"/>
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.4"/>
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.4"/>
+        <PackageReference Include="Spectre.Console.Cli" Version="0.50.0"/>
+        <PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.4" />
+        <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="9.0.4" />
+        <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.0.4" />
+        <PackageReference Include="Microsoft.Extensions.Http" Version="9.0.4" />
+    </ItemGroup>
+
+</Project>
