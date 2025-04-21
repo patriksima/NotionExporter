@@ -5,7 +5,7 @@
 
 param (
     [string]$PageId,
-    [string]$ExporterPath = ".\NotionExporter.exe",
+    [string]$ExporterPath = ".\NotionExporter.cli.exe",
     [switch]$Help,
     [switch]$Usage
 )
@@ -19,7 +19,7 @@ function Show-Help
     Write-Host ""
     Write-Host "Parameters:"
     Write-Host "  -PageId         ID of the Notion page to export from (required)"
-    Write-Host "  -ExporterPath   Path to NotionExporter.exe (default: .\NotionExporter.exe)"
+    Write-Host "  -ExporterPath   Path to NotionExporter.cli.exe (default: .\NotionExporter.cli.exe)"
     Write-Host "  -Help, -Usage   Show this help message"
     Write-Host ""
 }
