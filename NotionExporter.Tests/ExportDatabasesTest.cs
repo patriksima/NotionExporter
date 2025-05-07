@@ -37,9 +37,9 @@ public class ExportDatabasesTest
         var factory = new Mock<IOutputWriterFactory>();
         factory.Setup(f => f.GetWriter(OutputFormat.Csv)).Returns(writer);
 
-        var handler = new ExportDatabasesHandler(mockClient.Object, factory.Object);
+        var handler = new DatabaseExportHandler(mockClient.Object, factory.Object);
 
-        var request = new ExportDatabasesRequest
+        var request = new DatabaseExportRequest
         {
             Id = "abc",
             Format = OutputFormat.Csv,
@@ -85,9 +85,9 @@ public class ExportDatabasesTest
         var factory = new Mock<IOutputWriterFactory>();
         factory.Setup(f => f.GetWriter(OutputFormat.Json)).Returns(writer);
 
-        var handler = new ExportDatabasesHandler(mockClient.Object, factory.Object);
+        var handler = new DatabaseExportHandler(mockClient.Object, factory.Object);
 
-        var request = new ExportDatabasesRequest
+        var request = new DatabaseExportRequest
         {
             Id = "abc",
             Format = OutputFormat.Json,

@@ -45,7 +45,7 @@ dotnet publish -c Release
 2. Run it:
 
 ```bash
-.\NotionExporter\bin\Release\net9.0\publish\NotionExporter.exe [command] [options]
+NotionExporter.cli.exe [command] [options]
 ```
 
 ---
@@ -55,19 +55,19 @@ dotnet publish -c Release
 ### 🔸 Export a database to a file
 
 ```powershell
-.\NotionExporter.exe databases --id 1234abcd --output data.json
+NotionExporter.cli.exe databases export --id 1234abcd --output data.json
 ```
 
 ### 🔸 Export a database to standard output
 
 ```powershell
-.\NotionExporter.exe databases --id 1234abcd
+NotionExporter.cli.exe databases export --id 1234abcd
 ```
 
 ### 🔸 Use a custom filter query
 
 ```powershell
-.\NotionExporter.exe databases --id 1234abcd --filter-file query.json
+NotionExporter.cli.exe databases export --id 1234abcd --filter-file query.json
 ```
 
 **Example `query.json`:**
@@ -105,7 +105,7 @@ dotnet publish -c Release
 ## 🧪 PowerShell Example: Filter and Format Output
 
 ```powershell
-.\NotionExporter.exe databases --id 1234abcd |
+NotionExporter.cli.exe databases export --id 1234abcd |
     ConvertFrom-Json |
     % { $_.results } |
     % { [PSCustomObject]@{ Name = $_.properties.Name.title[0].plain_text } } |

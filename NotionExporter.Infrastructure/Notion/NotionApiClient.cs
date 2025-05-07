@@ -12,6 +12,29 @@ public class NotionApiClient(HttpClient httpClient, NotionAuthHandler authHandle
         authHandler.SetToken(token);
     }
 
+    public async Task<JsonDocument> ListDatabasesAsync()
+    {
+        var url = $"search";
+
+        var payload = """
+            {
+            "filter": {
+                "value": "database",
+                "property": "object"
+                }
+            }
+            """;
+
+        var content = new StringContent(payload, Encoding.UTF8, "application/json");
+
+        var response = await httpClient.PostAsync(url, content);
+        response.EnsureSuccessStatusCode();
+
+        var stream = await response.Content.ReadAsStreamAsync();
+        return await JsonDocument.ParseAsync(stream);
+    }
+
+
     public async Task<JsonDocument> QueryDatabaseAsync(string databaseId, string? filterJson = null)
     {
         var url = $"databases/{databaseId}/query";
