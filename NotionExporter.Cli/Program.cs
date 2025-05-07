@@ -25,7 +25,8 @@ services.Configure<NotionSettings>(configRoot.GetSection("Notion"));
 services.AddSingleton<IConfiguration>(configRoot);
 
 // spectre commands
-services.AddSingleton<ExportDatabaseCommand>();
+services.AddSingleton<DatabaseExportCommand>();
+services.AddSingleton<DatabaseListCommand>();
 services.AddSingleton<ExportPagesCommand>();
 services.AddSingleton<ExportBlocksCommand>();
 
@@ -36,7 +37,8 @@ services.AddSingleton<IOutputWriterFactory, OutputWriterFactory>();
 services.AddSingleton<IStreamProvider, StreamProvider>();
 
 // handlers
-services.AddTransient<IHandler<ExportDatabasesRequest>, ExportDatabasesHandler>();
+services.AddTransient<IHandler<DatabaseExportRequest>, DatabaseExportHandler>();
+services.AddTransient<IHandler<DatabaseListRequest>, DatabaseListHandler>();
 services.AddTransient<IHandler<ExportPagesRequest>, ExportPagesHandler>();
 services.AddTransient<IHandler<ExportBlocksRequest>, ExportBlocksHandler>();
 
@@ -72,14 +74,21 @@ app.Configure(config =>
     config.SetApplicationName("notion-exporter");
     config.ValidateExamples();
 
-    config.AddExample("databases", "--id", "123456756643812e81aad451290be2aa");
-    config.AddExample("databases", "--id", "123456756643812e81aad451290be2aa", "--output", "output.json");
+
     config.AddExample("pages", "--id", "123456756643812e81aad451290be2aa");
     config.AddExample("pages", "--id", "123456756643812e81aad451290be2aa", "--output", "output.json");
     config.AddExample("blocks", "--id", "123456756643812e81aad451290be2aa");
     config.AddExample("blocks", "--id", "123456756643812e81aad451290be2aa", "--output", "output.json");
 
-    config.AddCommand<ExportDatabaseCommand>("databases");
+    config.AddBranch("databases", database =>
+    {
+        database.AddCommand<DatabaseExportCommand>("export");
+        database.AddCommand<DatabaseListCommand>("list");
+        database.AddExample("databases", "export", "--id", "123456756643812e81aad451290be2aa");
+        database.AddExample("databases", "export", "--id", "123456756643812e81aad451290be2aa", "--output", "output.json");
+        database.AddExample("databases", "list");
+    });
+
     config.AddCommand<ExportPagesCommand>("pages");
     config.AddCommand<ExportBlocksCommand>("blocks");
 });

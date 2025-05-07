@@ -30,7 +30,7 @@ if ($Help -or $Usage -or [string]::IsNullOrWhiteSpace($DatabaseId))
     return
 }
 
-& $ExporterPath databases --id $DatabaseId |
+& $ExporterPath databases export --id $DatabaseId |
         ConvertFrom-Json |
         ForEach-Object {
             $_.results

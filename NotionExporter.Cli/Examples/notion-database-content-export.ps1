@@ -36,7 +36,7 @@ $filterJson = @"
 {"filter":{"property":"Date","date":{"this_week":{}}}}
 "@
 
-$pageIds = .\NotionExporter.Cli.exe databases --token $Token --id $DatabaseId --filter-json $filterJson |
+$pageIds = & $ExporterPath databases export --token $Token --id $DatabaseId --filter-json $filterJson |
     ConvertFrom-Json |
     ForEach-Object { $_.results } |
     ForEach-Object { $_.id }
@@ -45,7 +45,7 @@ foreach ($pageId in $pageIds)
 {
     Write-Host "Exporting blocks for page ID: $pageId" -ForegroundColor Cyan
     
-    $json = .\NotionExporter.Cli.exe blocks --token $token --id $pageId | ConvertFrom-Json
+    $json = & $ExporterPath blocks --token $token --id $pageId | ConvertFrom-Json
 
     foreach ($block in $json.results)
     {

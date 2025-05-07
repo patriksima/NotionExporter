@@ -3,9 +3,9 @@ using NotionExporter.Applications.Requests;
 
 namespace NotionExporter.Applications.Handlers;
 
-public class ExportDatabasesHandler(INotionApiClient client, IOutputWriterFactory outputWriterFactory) : ExportHandler<ExportDatabasesRequest>
+public class DatabaseExportHandler(INotionApiClient client, IOutputWriterFactory outputWriterFactory) : ExportHandler<DatabaseExportRequest>
 {
-    public override async Task ExecuteAsync(ExportDatabasesRequest request)
+    public override async Task ExecuteAsync(DatabaseExportRequest request)
     {
         string? queryJson = null;
         

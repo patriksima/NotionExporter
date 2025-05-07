@@ -1,4 +1,4 @@
-﻿using System.ComponentModel;
+using System.ComponentModel;
 using NotionExporter.Applications.Abstractions;
 using NotionExporter.Applications.Requests;
 using NotionExporter.Cli.Commands.Base;
@@ -7,14 +7,14 @@ using Spectre.Console.Cli;
 
 namespace NotionExporter.Cli.Commands;
 
-public class ExportDatabaseCommand(
-    IHandler<ExportDatabasesRequest> handler,
+public class DatabaseExportCommand(
+    IHandler<DatabaseExportRequest> handler,
     ITokenResolver tokenResolver)
-    : ExportCommand<ExportDatabaseCommand.Settings, ExportDatabasesRequest>(handler, tokenResolver)
+    : ExportCommand<DatabaseExportCommand.Settings, DatabaseExportRequest>(handler, tokenResolver)
 {
-    protected override ExportDatabasesRequest MapRequest(Settings settings, string apiToken)
+    protected override DatabaseExportRequest MapRequest(Settings settings, string apiToken)
     {
-        return new ExportDatabasesRequest
+        return new DatabaseExportRequest
         {
             Token = apiToken,
             Format = settings.Format,
