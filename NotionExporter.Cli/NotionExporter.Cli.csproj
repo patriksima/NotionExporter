@@ -20,6 +20,7 @@
         <None Update="appsettings.json">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
+        <None Include="bin\Debug\net9.0\Examples\notion-database-content-export.ps1"/>
     </ItemGroup>
 
     <ItemGroup>
